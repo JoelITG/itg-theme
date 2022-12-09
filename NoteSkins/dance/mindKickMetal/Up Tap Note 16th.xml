@@ -1,0 +1,34 @@
+<ActorFrame><children>
+	<Layer
+		File="../metal/Down Tap Note 16th.model"
+		InitCommand="%function(self)
+			self:queuecommand('Update');
+		end"
+		UpdateCommand="%function(self)
+			if GAMESTATE:GetSongBeat() < 192 then
+				self:rotationx(0);
+				self:rotationy(0);
+				self:rotationz(180);
+			end
+			if GAMESTATE:GetSongBeat() >= 192 and GAMESTATE:GetSongBeat() < 208 then
+				self:rotationz((GAMESTATE:GetSongBeat() - 192) * -2.8125 + 180);
+			end
+			if GAMESTATE:GetSongBeat() >= 208 and GAMESTATE:GetSongBeat() < 236 then
+				self:rotationz(135);
+			end
+			if GAMESTATE:GetSongBeat() >= 236 and GAMESTATE:GetSongBeat() < 237.5 then
+				self:rotationz((237.5 - GAMESTATE:GetSongBeat()) * -30 + 180);
+			end
+			if GAMESTATE:GetSongBeat() >= 237.5 and GAMESTATE:GetSongBeat() < 240 then
+				self:rotationz(180);
+			end
+			
+
+			self:queuecommand('Update2');
+		end"
+		Update2Command="%function(self)
+			self:sleep(0.0166666666);
+			self:queuecommand('Update');
+		end"
+	/>
+</children></ActorFrame>

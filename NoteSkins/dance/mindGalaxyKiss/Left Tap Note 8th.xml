@@ -1,0 +1,157 @@
+<ActorFrame><children>
+	<Layer
+		File="../metal/Down Tap Note 8th.model"
+		InitCommand="%function(self)
+			self:rotationz(90);
+			self:queuecommand('Update');
+		end"
+		UpdateCommand="%function(self)
+		--NOT 50% FLIP
+			if GAMESTATE:GetSongBeat() < 15.5 then
+				self:y(-128);
+				self:x(96);
+			end
+			if GAMESTATE:GetSongBeat() >= 15.5 and GAMESTATE:GetSongBeat() < 16 then
+				self:y((GAMESTATE:GetSongBeat() - 16) * 256);
+				self:x((16 - GAMESTATE:GetSongBeat()) * 192);
+			end
+			if GAMESTATE:GetSongBeat() >= 16 and GAMESTATE:GetSongBeat() < 17 then
+				self:y(0);
+				self:x(0);
+			end
+
+			if GAMESTATE:GetSongBeat() >= 17 and GAMESTATE:GetSongBeat() < 22.25 then
+				self:y(-128);
+				self:x(96);
+			end
+			if GAMESTATE:GetSongBeat() >= 22.25 and GAMESTATE:GetSongBeat() < 22.75 then
+				self:y((GAMESTATE:GetSongBeat() - 22.75) * 256);
+				self:x((22.75 - GAMESTATE:GetSongBeat()) * 192);
+			end
+			if GAMESTATE:GetSongBeat() >= 22.75 and GAMESTATE:GetSongBeat() < 24 then
+				self:y(0);
+				self:x(0);
+			end
+
+			if GAMESTATE:GetSongBeat() >= 24 and GAMESTATE:GetSongBeat() < 31.5 then
+				self:y(-128);
+				self:x(96);
+			end
+			if GAMESTATE:GetSongBeat() >= 31.5 and GAMESTATE:GetSongBeat() < 32 then
+				self:y((GAMESTATE:GetSongBeat() - 32) * 256);
+				self:x((32 - GAMESTATE:GetSongBeat()) * 192);
+			end
+			if GAMESTATE:GetSongBeat() >= 32 and GAMESTATE:GetSongBeat() < 33 then
+				self:y(0);
+				self:x(0);
+			end
+
+			if GAMESTATE:GetSongBeat() >= 33 and GAMESTATE:GetSongBeat() < 39.5 then
+				self:y(-128);
+				self:x(96);
+			end
+			if GAMESTATE:GetSongBeat() >= 39.5 and GAMESTATE:GetSongBeat() < 40 then
+				self:y((GAMESTATE:GetSongBeat() - 40) * 256);
+				self:x((40 - GAMESTATE:GetSongBeat()) * 192);
+			end
+			if GAMESTATE:GetSongBeat() >= 40 and GAMESTATE:GetSongBeat() < 41 then
+				self:y(0);
+				self:x(0);
+			end
+
+		--NONSTICK
+			if GAMESTATE:GetSongBeat() >= 49.5 and GAMESTATE:GetSongBeat() < 55.5 then
+				self:x(-64);
+			end
+			if GAMESTATE:GetSongBeat() >= 55.5 and GAMESTATE:GetSongBeat() < 56 then
+				self:x((56 - GAMESTATE:GetSongBeat()) * -128);
+			end
+			if GAMESTATE:GetSongBeat() >= 56 and GAMESTATE:GetSongBeat() < 57.5 then
+				self:x(0);
+			end
+
+			if GAMESTATE:GetSongBeat() >= 57.5 and GAMESTATE:GetSongBeat() < 63.5 then
+				self:x(64);
+			end
+			if GAMESTATE:GetSongBeat() >= 63.5 and GAMESTATE:GetSongBeat() < 64 then
+				self:x((64 - GAMESTATE:GetSongBeat()) * 128);
+			end
+			if GAMESTATE:GetSongBeat() >= 64 and GAMESTATE:GetSongBeat() < 65.5 then
+				self:x(0);
+			end
+
+			if GAMESTATE:GetSongBeat() >= 65.5 and GAMESTATE:GetSongBeat() < 71.5 then
+				self:x(-64);
+			end
+			if GAMESTATE:GetSongBeat() >= 71.5 and GAMESTATE:GetSongBeat() < 72 then
+				self:x((72 - GAMESTATE:GetSongBeat()) * -128);
+			end
+			if GAMESTATE:GetSongBeat() >= 72 and GAMESTATE:GetSongBeat() < 73.5 then
+				self:x(0);
+			end
+			
+			if GAMESTATE:GetSongBeat() >= 73.5 and GAMESTATE:GetSongBeat() < 75.5 then
+				self:x(128);
+			end
+			if GAMESTATE:GetSongBeat() >= 75.5 and GAMESTATE:GetSongBeat() < 76 then
+				self:x((76 - GAMESTATE:GetSongBeat()) * 256);
+			end
+			if GAMESTATE:GetSongBeat() >= 76 and GAMESTATE:GetSongBeat() < 78.5 then
+				self:x(0);
+			end
+
+			if GAMESTATE:GetSongBeat() >= 78.5 and GAMESTATE:GetSongBeat() < 87.5 then
+				self:x(-64);
+			end
+			if GAMESTATE:GetSongBeat() >= 87.5 and GAMESTATE:GetSongBeat() < 88 then
+				self:x((88 - GAMESTATE:GetSongBeat()) * -128);
+			end
+			if GAMESTATE:GetSongBeat() >= 88 and GAMESTATE:GetSongBeat() < 89.5 then
+				self:x(0);
+			end
+
+			if GAMESTATE:GetSongBeat() >= 89.5 and GAMESTATE:GetSongBeat() < 95.5 then
+				self:x(64);
+			end
+			if GAMESTATE:GetSongBeat() >= 95.5 and GAMESTATE:GetSongBeat() < 96 then
+				self:x((96 - GAMESTATE:GetSongBeat()) * 128);
+			end
+			if GAMESTATE:GetSongBeat() >= 96 and GAMESTATE:GetSongBeat() < 97.5 then
+				self:x(0);
+			end
+
+		--NOT 50% FLIP AGAIN
+			if GAMESTATE:GetSongBeat() >= 169 and GAMESTATE:GetSongBeat() < 187.5 then
+				self:y(-128);
+				self:x(96);
+			end
+			if GAMESTATE:GetSongBeat() >= 187.5 and GAMESTATE:GetSongBeat() < 188 then
+				self:y((GAMESTATE:GetSongBeat() - 188) * 256);
+				self:x((188 - GAMESTATE:GetSongBeat()) * 192);
+			end
+			if GAMESTATE:GetSongBeat() >= 188 and GAMESTATE:GetSongBeat() < 189 then
+				self:y(0);
+				self:x(0);
+			end
+
+			if GAMESTATE:GetSongBeat() >= 189 and GAMESTATE:GetSongBeat() < 195.5 then
+				self:y(-128);
+				self:x(96);
+			end
+			if GAMESTATE:GetSongBeat() >= 195.5 and GAMESTATE:GetSongBeat() < 196 then
+				self:y((GAMESTATE:GetSongBeat() - 196) * 256);
+				self:x((196 - GAMESTATE:GetSongBeat()) * 192);
+			end
+			if GAMESTATE:GetSongBeat() >= 196 and GAMESTATE:GetSongBeat() < 197 then
+				self:y(0);
+				self:x(0);
+			end
+
+			self:queuecommand('Update2');
+		end"
+		Update2Command="%function(self)
+			self:sleep(0.01);
+			self:queuecommand('Update');
+		end"
+	/>
+</children></ActorFrame>

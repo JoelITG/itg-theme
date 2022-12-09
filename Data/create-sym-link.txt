@@ -1,0 +1,1 @@
+mklink /D "C:\Users\MonkeyDance\Desktop\MaxITG\Songs" "C:\Users\MonkeyDance\Desktop\NotITG\Songs"

@@ -1,0 +1,194 @@
+<!-- "effectoffset,0.05" start the flash 5% before the beat -->
+<ActorFrame
+	InitCommand="queuecommand,Update"
+	UpdateCommand="%function (self)
+	
+		--This is a framework for a noteskin to accept lua
+		
+		if( receptor_rotationx_1 )then
+			self:rotationx(receptor_rotationx_1);
+		end
+		if( receptor_rotationy_1 )then
+			self:rotationy(receptor_rotationy_1);
+		end
+		if( receptor_rotationz_1 )then
+			self:rotationz(receptor_rotationz_1);
+		end
+		
+		if( receptor_x_1 )then
+			self:x(receptor_x_1);
+		end
+		if( receptor_y_1 )then
+			self:y(receptor_y_1);
+		end
+		if( receptor_z_1 )then
+			self:z(receptor_z_1);
+		end
+		
+		if( receptor_zoom_1 )then
+			self:zoom(receptor_zoom_1);
+		end
+		if( receptor_zoomx_1 )then
+			self:zoomx(receptor_zoomx_1);
+		end
+		if( receptor_zoomy_1 )then
+			self:zoomy(receptor_zoomy_1);
+		end
+		if( receptor_zoomtowidth_1 )then
+			self:zoomtowidth(receptor_zoomtowidth_1);
+		end
+		if( receptor_zoomtoheight_1 )then
+			self:zoomtoheight(receptor_zoomtoheight_1);
+		end
+		
+		if( receptor_tint_1 )then
+			self:diffuse(receptor_tint_1[1],receptor_tint_1[2],receptor_tint_1[3],receptor_tint_1[4]);
+		end
+		if( receptor_fade_1 )then
+			self:diffusealpha(receptor_fade_1);
+		end
+		
+		if( receptor_effect_1 )then
+			if receptor_effect_1 == 'wag' then
+				self:wag();
+			end
+			if receptor_effect_1 == 'vibrate' then
+				self:vibrate();
+			end
+			if receptor_effect_1 == 'spin' then
+				self:spin();
+			end
+			if receptor_effect_1 == 'pulse' then
+				self:pulse();
+			end
+			if receptor_effect_1 == 'bob' then
+				self:bob();
+			end
+			if receptor_effect_1 == 'bounce' then
+				self:bounce();
+			end
+			if receptor_effectcontrol_1 then
+				self:effectmagnitude(receptor_effectcontrol_1[1],receptor_effectcontrol_1[2],receptor_effectcontrol_1[3]);
+				self:effectperiod(receptor_effectcontrol_1[4]);
+				self:effectclock(receptor_effectcontrol_1[5]);
+			end
+		else
+			self:stopeffect();
+		end
+		
+		self:queuecommand('Update2');
+	end"
+	Update2Command="sleep,0.0333;queuecommand,Update"
+><children>
+<ActorFrame 
+InitCommand="%function(self)
+DzCheckMetalClassicTaro = 0;
+self:z(0);
+if DGenerationA == nil then DGenerationA = 0; end
+if DGenerationA == 2 then DGenerationA = 0;	end
+if DGenerationA == 0 then
+	self:z(1);
+	DGenerationA = DGenerationA + 1;
+	else
+	DGenerationA = DGenerationA + 1;
+	end
+end"
+
+W1Command="%function(self) DzCheckMetalClassicTaro = self:GetZ(); if DzCheckMetalClassicTaro > 0 then
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then MESSAGEMAN:Broadcast('W1P1Down'); MESSAGEMAN:Broadcast('W1P1'); else
+MESSAGEMAN:Broadcast('W1P2Down'); MESSAGEMAN:Broadcast('W1P2'); end else MESSAGEMAN:Broadcast('W1P2Down'); MESSAGEMAN:Broadcast('W1P2'); end end"
+
+W2Command="%function(self) DzCheckMetalClassicTaro = self:GetZ(); if DzCheckMetalClassicTaro > 0 then
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then MESSAGEMAN:Broadcast('W2P1Down'); MESSAGEMAN:Broadcast('W2P1'); else
+MESSAGEMAN:Broadcast('W2P2Down'); MESSAGEMAN:Broadcast('W2P2'); end else MESSAGEMAN:Broadcast('W2P2Down'); MESSAGEMAN:Broadcast('W2P2'); end end"
+
+W3Command="%function(self) DzCheckMetalClassicTaro = self:GetZ(); if DzCheckMetalClassicTaro > 0 then
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then MESSAGEMAN:Broadcast('W3P1Down'); MESSAGEMAN:Broadcast('W3P1'); else
+MESSAGEMAN:Broadcast('W3P2Down'); MESSAGEMAN:Broadcast('W3P2'); end else MESSAGEMAN:Broadcast('W3P2Down'); MESSAGEMAN:Broadcast('W3P2'); end end"
+
+W4Command="%function(self) DzCheckMetalClassicTaro = self:GetZ(); if DzCheckMetalClassicTaro > 0 then
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then MESSAGEMAN:Broadcast('W4P1Down'); MESSAGEMAN:Broadcast('W4P1'); else
+MESSAGEMAN:Broadcast('W4P2Down'); MESSAGEMAN:Broadcast('W4P2'); end else MESSAGEMAN:Broadcast('W4P2Down'); MESSAGEMAN:Broadcast('W4P2'); end end"
+
+W5Command="%function(self) DzCheckMetalClassicTaro = self:GetZ(); if DzCheckMetalClassicTaro > 0 then
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then MESSAGEMAN:Broadcast('W5P1Down'); MESSAGEMAN:Broadcast('W5P1'); else
+MESSAGEMAN:Broadcast('W5P2Down'); MESSAGEMAN:Broadcast('W5P2'); end else MESSAGEMAN:Broadcast('W5P2Down'); MESSAGEMAN:Broadcast('W5P2'); end end"
+
+W6Command="%function(self) DzCheckMetalClassicTaro = self:GetZ(); if DzCheckMetalClassicTaro > 0 then
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then MESSAGEMAN:Broadcast('MissP1Down'); MESSAGEMAN:Broadcast('MissP1'); else
+MESSAGEMAN:Broadcast('MissP2Down'); MESSAGEMAN:Broadcast('MissP2'); end else MESSAGEMAN:Broadcast('MissP2Down'); MESSAGEMAN:Broadcast('MissP2'); end end"
+
+PressCommand="%function(self)
+DzCheckMetalClassicTaro = self:GetZ();
+if DzCheckMetalClassicTaro > 0 then
+	if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
+		DpressP1 = 1;
+		else
+		DpressP2 = 1;
+		end
+else
+	DpressP2 = 1;
+end
+end"
+
+LiftCommand="%function(self)
+DzCheckMetalClassicTaro = self:GetZ();
+if DzCheckMetalClassicTaro > 0 then
+	if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
+		DpressP1 = 0;
+		else
+		DpressP2 = 0;
+		end
+else
+	DpressP2 = 0;
+end
+end"
+><children>
+	<Sprite
+		Texture="_Down Receptor tex"
+		Frame0000="0"
+		Delay0000="0.95"
+		Frame0001="1"
+		Delay0001="1"
+		Frame0002="2"
+		Delay0002="1"
+		Frame0003="3"
+		Delay0003="1"
+		Frame0004="0"
+		Delay0004="0.05"
+		InitCommand="x,0;rotationz,0;EffectClock,beat;DiffuseRamp;EffectColor1,0.4,0.4,0.4,1;EffectColor2,1,1,1,1,1;effectperiod,0.5;EffectDelay,0.5;EffectOffset,0.05"
+	/>
+	<Sprite
+		Texture="_Down Receptor tex"
+		Frame0000="0"
+		Delay0000="0.95"
+		Frame0001="1"
+		Delay0001="1"
+		Frame0002="2"
+		Delay0002="1"
+		Frame0003="3"
+		Delay0003="1"
+		Frame0004="0"
+		Delay0004="0.05"
+		InitCommand="x,0;rotationz,0;blend,add;diffusealpha,0"
+
+		LiftCommand="%function(self)
+			self:diffusealpha(0)
+			end"
+	/>
+<!--<BitmapText
+		File="_eurostile normal"
+		Text=""
+		InitCommand="%function(self)
+		self:y(100);
+		if GenOrder == nil then
+			GenOrder = 1;
+		else
+			GenOrder = GenOrder + 1;
+		end
+		self:settext(GenOrder);
+		end"
+	/>-->
+
+</children></ActorFrame>
+</children></ActorFrame>

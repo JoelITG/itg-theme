@@ -1,0 +1,57 @@
+<ActorFrame><children>
+	<Layer
+		File="../metal/Down Tap Note 4th.model"
+		InitCommand="%function(self)
+			self:rotationz(90);
+			self:queuecommand('Update');
+		end"
+		UpdateCommand="%function(self)
+		--NOT 50% FLIP
+			if GAMESTATE:GetSongBeat() < 26.75 then
+				self:y(-192);
+				self:x(96);
+			end
+			if GAMESTATE:GetSongBeat() >= 26.75 and GAMESTATE:GetSongBeat() < 27.5 then
+				self:y((GAMESTATE:GetSongBeat() - 27.5) * 256);
+				self:x((27.5 - GAMESTATE:GetSongBeat()) * 128);
+			end
+			if GAMESTATE:GetSongBeat() >= 27.5 and GAMESTATE:GetSongBeat() < 28.5 then
+				self:y(0);
+				self:x(0);
+			end
+
+			if GAMESTATE:GetSongBeat() >= 28.5 and GAMESTATE:GetSongBeat() < 34.75 then
+				self:y(-192);
+				self:x(96);
+			end
+			if GAMESTATE:GetSongBeat() >= 34.75 and GAMESTATE:GetSongBeat() < 35.5 then
+				self:y((GAMESTATE:GetSongBeat() - 35.5) * 256);
+				self:x((35.5 - GAMESTATE:GetSongBeat()) * 128);
+			end
+			if GAMESTATE:GetSongBeat() >= 35.5 and GAMESTATE:GetSongBeat() < 36.5 then
+				self:y(0);
+				self:x(0);
+			end
+
+		--NOT 50% FLIP AGAIN
+			if GAMESTATE:GetSongBeat() >= 169 and GAMESTATE:GetSongBeat() < 182.75 then
+				self:y(-192);
+				self:x(96);
+			end
+			if GAMESTATE:GetSongBeat() >= 182.75 and GAMESTATE:GetSongBeat() < 183.5 then
+				self:y((GAMESTATE:GetSongBeat() - 183.5) * 256);
+				self:x((183.5 - GAMESTATE:GetSongBeat()) * 128);
+			end
+			if GAMESTATE:GetSongBeat() >= 183.5 and GAMESTATE:GetSongBeat() < 184.5 then
+				self:y(0);
+				self:x(0);
+			end
+
+			self:queuecommand('Update2');
+		end"
+		Update2Command="%function(self)
+			self:sleep(0.01);
+			self:queuecommand('Update');
+		end"
+	/>
+</children></ActorFrame>

@@ -1,0 +1,55 @@
+<ActorFrame><children>
+<Actor
+    File='sprites/8th.sprite'
+    InitCommand='%function (self)
+        DIVINE_ENTITY:RegisterTapNote("Up Tap Note 8th Clone 5", self)
+        self:hidden(1)
+        self:rotationz(180)
+    end'
+/>
+
+<Actor
+    File='sprites/8th.sprite'
+    InitCommand='%function (self)
+        DIVINE_ENTITY:RegisterTapNote("Up Tap Note 8th Clone 4", self)
+        self:hidden(1)
+        self:rotationz(180)
+    end'
+/>
+
+<Actor
+    File='sprites/8th.sprite'
+    InitCommand='%function (self)
+        DIVINE_ENTITY:RegisterTapNote("Up Tap Note 8th Clone 3", self)
+        self:hidden(1)
+        self:rotationz(180)
+    end'
+/>
+
+<Actor
+    File='sprites/8th.sprite'
+    InitCommand='%function (self)
+        DIVINE_ENTITY:RegisterTapNote("Up Tap Note 8th Clone 2", self)
+        self:hidden(1)
+        self:rotationz(180)
+    end'
+/>
+
+<Actor
+    File='sprites/8th.sprite'
+    InitCommand='%function (self)
+        DIVINE_ENTITY:RegisterTapNote("Up Tap Note 8th Clone 1", self)
+        self:hidden(1)
+        self:rotationz(180)
+    end'
+/>
+
+<Actor
+    File='sprites/8th.sprite'
+    InitCommand='%function (self)
+        DIVINE_ENTITY:RegisterTapNote("Up Tap Note 8th Clone 0", self)
+        self:hidden(0)
+        self:rotationz(180)
+    end'
+/>
+</children></ActorFrame>

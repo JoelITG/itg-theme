@@ -1,0 +1,14 @@
+<ActorFrame><children>
+	<Layer
+		File="_Down Tap Note 64th 4x4.png"
+		InitCommand="cropright,0.5"
+		SplitNotesMessageCommand="bob;EffectMagnitude,0,16,0;EffectPeriod,16;EffectClock,beat"
+		CombineNotesMessageCommand="stopeffect"
+	/>
+	<Layer
+		File="_Down Tap Note 64th 4x4.png"
+		InitCommand="cropleft,0.5"
+		SplitNotesMessageCommand="bob;EffectMagnitude,0,-16,0;EffectPeriod,16;EffectClock,beat"
+		CombineNotesMessageCommand="stopeffect"
+	/>
+</children></ActorFrame>

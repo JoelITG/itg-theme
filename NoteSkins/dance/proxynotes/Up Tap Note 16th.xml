@@ -1,0 +1,10 @@
+<ActorFrame><children>
+
+	<Layer
+	Type="ActorProxy"
+	InitCommand="%function(self)
+	ns_proxy16u=self;
+	end"
+	/>
+
+</children></ActorFrame>

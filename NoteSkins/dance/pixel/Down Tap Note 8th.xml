@@ -1,0 +1,18 @@
+<ActorFrame InitCommand="zoom,0.9"><children>
+	<Sprite
+		Texture="_Down Tap Note 8th 6x1"
+		Frame0000="0"
+		Delay0000="0.1666666666"
+		Frame0001="1"
+		Delay0001="0.1666666666"
+		Frame0002="2"
+		Delay0002="0.1666666666"
+		Frame0003="3"
+		Delay0003="0.1666666666"
+		Frame0004="4"
+		Delay0004="0.1666666666"
+		Frame0005="5"
+		Delay0005="0.1666666666"
+		InitCommand="EffectClock,beat"
+	/>
+</children></ActorFrame>

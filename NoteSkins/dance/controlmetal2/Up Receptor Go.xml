@@ -1,0 +1,83 @@
+<!--
+This is a much-simplified version of the GOD Noteskin by Taro/Jayce.
+It allows us to read gameplay input from both players.
+However, it does not split the playfield up into pieces to accept further commands.
+Furthermore, additional MESSAGEMAN broadcasts are used to determine individual taps.
+-->
+<ActorFrame><children>
+	<ActorFrame
+		InitCommand="%function(self)
+			UzCheck = 0;
+			self:z(0);
+			if UGenerationA == nil then UGenerationA = 0; end
+			if UGenerationA == 2 then UGenerationA = 0;	end
+			if UGenerationA == 0 then
+				self:z(1);
+				UGenerationA = UGenerationA + 1;
+			else
+				UGenerationA = UGenerationA + 1;
+			end
+		end"
+		PressCommand="%function(self)
+			UzCheck = self:GetZ();
+			if UzCheck > 0 then
+				if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
+					UpressP1 = 1;
+					MESSAGEMAN:Broadcast('P1StepUp');
+				else
+					UpressP2 = 1;
+					MESSAGEMAN:Broadcast('P2StepUp');
+				end
+			else
+				UpressP2 = 1;
+				MESSAGEMAN:Broadcast('P2StepUp');
+			end
+		end"
+		LiftCommand="%function(self)
+			UzCheck = self:GetZ();
+			if UzCheck > 0 then
+				if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
+					UpressP1 = 0;
+					MESSAGEMAN:Broadcast('P1LiftUp');
+				else
+					UpressP2 = 0;
+					MESSAGEMAN:Broadcast('P2LiftUp');
+				end
+			else
+				UpressP2 = 0;
+				MESSAGEMAN:Broadcast('P2LiftUp');
+			end
+		end"
+	><children>
+		<Sprite
+			Texture="_Down Receptor tex"
+			Frame0000="0"
+			Delay0000="0.95"
+			Frame0001="1"
+			Delay0001="1"
+			Frame0002="2"
+			Delay0002="1"
+			Frame0003="3"
+			Delay0003="1"
+			Frame0004="0"
+			Delay0004="0.05"
+			InitCommand="rotationz,180;EffectClock,beat;DiffuseRamp;EffectColor1,0.4,0.4,0.4,1;EffectColor2,1,1,1,1,1;effectperiod,0.5;EffectDelay,0.5;EffectOffset,0.05"
+		/>
+		<Sprite
+			Texture="_Down Receptor tex"
+			Frame0000="0"
+			Delay0000="0.95"
+			Frame0001="1"
+			Delay0001="1"
+			Frame0002="2"
+			Delay0002="1"
+			Frame0003="3"
+			Delay0003="1"
+			Frame0004="0"
+			Delay0004="0.05"
+			InitCommand="rotationz,180;blend,add;diffusealpha,0"
+			PressCommand="diffusealpha,0.2"
+			LiftCommand="diffusealpha,0"
+		/>
+	</children></ActorFrame>
+</children></ActorFrame>

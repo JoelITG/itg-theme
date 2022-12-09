@@ -1,0 +1,10 @@
+<ActorFrame><children>
+
+	<Layer
+	Type="ActorProxy"
+	OnCommand="%function(self)
+	ns_proxy32u=self;
+	end"
+	/>
+
+</children></ActorFrame>

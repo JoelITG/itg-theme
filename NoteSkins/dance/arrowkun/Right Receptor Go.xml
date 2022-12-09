@@ -1,0 +1,194 @@
+<!-- "effectoffset,0.05" start the flash 5% before the beat -->
+<ActorFrame
+	InitCommand="queuecommand,Update"
+	UpdateCommand="%function (self)
+	
+		--This is a framework for a noteskin to accept lua
+		
+		if( receptor_rotationx_3 )then
+			self:rotationx(receptor_rotationx_3);
+		end
+		if( receptor_rotationy_3 )then
+			self:rotationy(receptor_rotationy_3);
+		end
+		if( receptor_rotationz_3 )then
+			self:rotationz(receptor_rotationz_3);
+		end
+		
+		if( receptor_x_3 )then
+			self:x(receptor_x_3);
+		end
+		if( receptor_y_3 )then
+			self:y(receptor_y_3);
+		end
+		if( receptor_z_3 )then
+			self:z(receptor_z_3);
+		end
+		
+		if( receptor_zoom_3 )then
+			self:zoom(receptor_zoom_3);
+		end
+		if( receptor_zoomx_3 )then
+			self:zoomx(receptor_zoomx_3);
+		end
+		if( receptor_zoomy_3 )then
+			self:zoomy(receptor_zoomy_3);
+		end
+		if( receptor_zoomtowidth_3 )then
+			self:zoomtowidth(receptor_zoomtowidth_3);
+		end
+		if( receptor_zoomtoheight_3 )then
+			self:zoomtoheight(receptor_zoomtoheight_3);
+		end
+		
+		if( receptor_tint_3 )then
+			self:diffuse(receptor_tint_3[1],receptor_tint_3[2],receptor_tint_3[3],receptor_tint_3[4]);
+		end
+		if( receptor_fade_3 )then
+			self:diffusealpha(receptor_fade_3);
+		end
+		
+		if( receptor_effect_3 )then
+			if receptor_effect_3 == 'wag' then
+				self:wag();
+			end
+			if receptor_effect_3 == 'vibrate' then
+				self:vibrate();
+			end
+			if receptor_effect_3 == 'spin' then
+				self:spin();
+			end
+			if receptor_effect_3 == 'pulse' then
+				self:pulse();
+			end
+			if receptor_effect_3 == 'bob' then
+				self:bob();
+			end
+			if receptor_effect_3 == 'bounce' then
+				self:bounce();
+			end
+			if receptor_effectcontrol_3 then
+				self:effectmagnitude(receptor_effectcontrol_3[1],receptor_effectcontrol_3[2],receptor_effectcontrol_3[3]);
+				self:effectperiod(receptor_effectcontrol_3[4]);
+				self:effectclock(receptor_effectcontrol_3[5]);
+			end
+		else
+			self:stopeffect();
+		end
+		
+		self:queuecommand('Update2');
+	end"
+	Update2Command="sleep,0.0333;queuecommand,Update"
+><children>
+<ActorFrame 
+InitCommand="%function(self)
+RzCheck = 0;
+self:z(0);
+if RGenerationA == nil then RGenerationA = 0; end
+if RGenerationA == 2 then RGenerationA = 0;	end
+if RGenerationA == 0 then
+	self:z(1);
+	RGenerationA = RGenerationA + 1;
+	else
+	RGenerationA = RGenerationA + 1;
+	end
+end"
+
+PressCommand="%function(self)
+RzCheck = self:GetZ();
+if RzCheck > 0 then
+	if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
+		RpressP1 = 1;
+		else
+		RpressP2 = 1;
+		end
+else
+	RpressP2 = 1;
+end
+end"
+
+W1Command="%function(self) RzCheck = self:GetZ(); if RzCheck > 0 then
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then MESSAGEMAN:Broadcast('W1P1Right'); else
+MESSAGEMAN:Broadcast('W1P2Right');  end else MESSAGEMAN:Broadcast('W1P2Right'); end end"
+
+W2Command="%function(self) RzCheck = self:GetZ(); if RzCheck > 0 then
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then MESSAGEMAN:Broadcast('W2P1Right'); else
+MESSAGEMAN:Broadcast('W2P2Right'); end else MESSAGEMAN:Broadcast('W2P2Right'); end end"
+
+W3Command="%function(self) RzCheck = self:GetZ(); if RzCheck > 0 then
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then MESSAGEMAN:Broadcast('W3P1Right'); else
+MESSAGEMAN:Broadcast('W3P2Right'); end else MESSAGEMAN:Broadcast('W3P2Right'); end end"
+
+W4Command="%function(self) RzCheck = self:GetZ(); if RzCheck > 0 then
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then MESSAGEMAN:Broadcast('W4P1Right'); else
+MESSAGEMAN:Broadcast('W4P2Right'); end else MESSAGEMAN:Broadcast('W4P2Right'); end end"
+
+W5Command="%function(self) RzCheck = self:GetZ(); if RzCheck > 0 then
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then MESSAGEMAN:Broadcast('W5P1Right'); else
+MESSAGEMAN:Broadcast('W5P2Right'); end else MESSAGEMAN:Broadcast('W5P2Right'); end end"
+
+W6Command="%function(self) RzCheck = self:GetZ(); if RzCheck > 0 then
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then MESSAGEMAN:Broadcast('MissP1Right'); else
+MESSAGEMAN:Broadcast('MissP2Right'); end else MESSAGEMAN:Broadcast('MissP2Right'); end end"
+
+LiftCommand="%function(self)
+RzCheck = self:GetZ();
+if RzCheck > 0 then
+	if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
+		RpressP1 = 0;
+		else
+		RpressP2 = 0;
+		end
+else
+	RpressP2 = 0;
+end
+end"
+><children>
+	<Sprite
+		Texture="_Down Receptor tex"
+		Frame0000="0"
+		Delay0000="0.95"
+		Frame0001="1"
+		Delay0001="1"
+		Frame0002="2"
+		Delay0002="1"
+		Frame0003="3"
+		Delay0003="1"
+		Frame0004="0"
+		Delay0004="0.05"
+		InitCommand="x,0;rotationz,270;EffectClock,beat;DiffuseRamp;EffectColor1,0.4,0.4,0.4,1;EffectColor2,1,1,1,1,1;effectperiod,0.5;EffectDelay,0.5;EffectOffset,0.05"
+	/>
+	<Sprite
+		Texture="_Down Receptor tex"
+		Frame0000="0"
+		Delay0000="0.95"
+		Frame0001="1"
+		Delay0001="1"
+		Frame0002="2"
+		Delay0002="1"
+		Frame0003="3"
+		Delay0003="1"
+		Frame0004="0"
+		Delay0004="0.05"
+		InitCommand="x,0;rotationz,270;blend,add;diffusealpha,0"
+
+		LiftCommand="%function(self)
+			self:diffusealpha(0)
+			end"
+	/>
+<!--<BitmapText
+		File="_eurostile normal"
+		Text=""
+		InitCommand="%function(self)
+		self:y(100);
+		if GenOrder == nil then
+			GenOrder = 1;
+		else
+			GenOrder = GenOrder + 1;
+		end
+		self:settext(GenOrder);
+		end"
+	/>-->
+
+</children></ActorFrame>
+</children></ActorFrame>

@@ -1,0 +1,14 @@
+<!-- "effectoffset,0.05" start the flash 5% before the beat -->
+<ActorFrame
+	InitCommand="zoom,0.9"
+	PressCommand="zoom,0.9"
+	LiftCommand="zoom,0.9"><children>
+	<Sprite
+		Texture="_Down Receptor tex"
+		Frame0000="0"
+		Delay0000="0.2"
+		Frame0001="1"
+		Delay0001="0.8"
+		InitCommand="EffectClock,beat;effectoffset,0.5;effectoffset,0.5"
+	/>
+</children></ActorFrame>

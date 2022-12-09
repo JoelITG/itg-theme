@@ -1,0 +1,355 @@
+<ActorFrame
+ InitCommand="%function(self)
+    DIVINE_ENTITY = {
+        notes={},
+        explosions={}, --referred to as ghost arrows almost everywhere else in SM, including the NoteSkin metrics.
+        mines={},
+        receptors={[PLAYER_1]={}, [PLAYER_2]={}},
+        receptorsLookupTable={},
+        
+        metrics = {GhostArrowDim={}, GhostArrowBright={}, HoldGhostArrow={}, ReceptorArrow={}},
+
+        --some constants
+        STATE_NEUTRAL = 1,
+        STATE_PRESSED = 2,
+        NOTE_TYPE_TAP = 'Tap Note',
+        NOTE_TYPE_HOLD_HEAD_ACTIVE = 'Hold Head active',
+        NOTE_TYPE_HOLD_HEAD_INACTIVE = 'Hold Head inactive',
+        NOTE_TYPE_ROLL_HEAD_ACTIVE = 'Roll Head active',
+        NOTE_TYPE_ROLL_HEAD_INACTIVE = 'Roll Head inactive',
+        EXPLOSION_TYPE_TAP = 'Tap Explosion',
+        TNS_MARVELOUS='Fantastic',
+        TNS_PERFECT='Excellent',
+        TNS_GREAT='Great',
+        TNS_GOOD='Decent',
+        TNS_BOO='WayOff',
+        TNS_MISS='Miss',
+        TNS_HIT_MINE='HitMine',
+        HNS_OK='OK',
+        HNS_NG='NG'
+    }
+    
+    ------------------------------
+    --Generic reusable functions--
+    ------------------------------
+    
+    --This function makes the fluent magic happen.
+    function DIVINE_ENTITY.catch(table, key)
+        return function(...)
+            local paramStr
+        
+            for i,v in pairs(arg) do
+                if type(v) ~= 'table' then
+                    local param
+                    if type(v) == 'string' then param = '\'' .. v .. '\'' else param = v end
+                    if paramStr == nil then paramStr = param else paramStr = paramStr .. ',' .. param end
+                end
+            end
+
+            --[[
+            For some reason ',2' is always on the end of the paramStr, so chop it off. 
+            I don't really have time to investigate it further, but this seems to work.
+            --]]
+            paramStr = string.sub(paramStr,0,-3)
+
+            for i,v in pairs(arg[1]) do
+                --This is the worst hack ever and I am not proud of it.
+                _G['DivinEntity_f2r'] = v
+                funcstr = '_G[\'DivinEntity_f2r\']:' .. key .. '(' .. paramStr .. ')';
+                assert(loadstring(funcstr))()                                
+            end
+            
+            return table
+        end                    
+    end
+
+    --[[
+    This function takes in a table of strings to find inside str
+    if and only if str contains all of them, it returns true
+    --]]  
+    function DIVINE_ENTITY.contains(str, stringsToFind)
+        for k,v in pairs(stringsToFind) do
+            if not string.find(str, v) then return false end
+        end
+        
+        return true
+    end
+    
+    --Generic lookup function to use in wrappers    
+    function DIVINE_ENTITY:GetActors(actorTable, nameParams)
+        local matchedActorsTable = {}
+        local mt = { __index = self.catch }
+        setmetatable(matchedActorsTable, mt)
+        
+        for name,actor in pairs(actorTable) do
+            --return only actors that match our criteria set out in nameParams
+            if self.contains(name, nameParams) then matchedActorsTable[name] = actor end
+        end
+        
+        return matchedActorsTable
+    end
+    
+    ----------------------
+    --Receptor functions--
+    ----------------------
+    
+    --[[
+    The receptors are loaded once for each player, so we can exploit this to figure
+    out which set belongs to which player.
+    
+    We also put the string value of the actor in a lookup table.
+    This way, in the receptor xml files, all we have to do on a pressCommand
+    is DIVINE_ENTITY:ReceptorPressed(self) and we can lookup what arrow that
+    actor is, and broadcast accordingly.
+    --]]
+    function DIVINE_ENTITY:RegisterReceptor(direction, actor)    
+        --Case 1: P1 _XOR_ P2. We know exactly who the receptors belong to.
+        if GAMESTATE:IsPlayerEnabled(PLAYER_1) and not GAMESTATE:IsPlayerEnabled(PLAYER_2) then
+            self.receptors[PLAYER_1][direction] = actor
+            self.receptorsLookupTable[tostring(actor)] = {name = 'P1' .. direction, state = self.STATE_NEUTRAL}            
+            return
+        elseif not GAMESTATE:IsPlayerEnabled(PLAYER_1) and GAMESTATE:IsPlayerEnabled(PLAYER_2) then
+            self.receptors[PLAYER_2][direction] = actor
+            self.receptorsLookupTable[tostring(actor)] = {name = 'P2' .. direction, state = self.STATE_NEUTRAL}
+            return
+        end
+    
+        --Case 2: P1 _AND_ P2. We don't know who the arrows belong to, need to be clever.
+        if self.receptors[PLAYER_1][direction] == nil then
+            self.receptors[PLAYER_1][direction] = actor
+            self.receptorsLookupTable[tostring(actor)] = {name = 'P1' .. direction, state = self.STATE_NEUTRAL}
+        else
+            self.receptors[PLAYER_2][direction] = actor
+            self.receptorsLookupTable[tostring(actor)] = {name = 'P2' .. direction, state = self.STATE_NEUTRAL}
+        end
+    end
+    
+    --[[
+    Initially I wanted this to only return the Over and Under sprites. But there is a weird issue
+    where those sprites do some strange stuff if they get far away from their initial position.
+    
+    So what this unfortunately means is I can't use the generic GetActor function.
+    
+    If you give it JUST a direction, it returns the actor frame, so it can be moved nicely.
+    If you give it at least sprite, then it will return the sprite actor itself.
+    If you give it nothing it returns all the actor frames.
+    --]]
+    function DIVINE_ENTITY:GetReceptors(player, direction, sprite)
+        local receptors = {}
+        local mt = { __index = self.catch }
+
+        setmetatable(receptors, mt)
+        
+        for name,actor in pairs(self.receptors[player]) do
+            if direction and sprite then
+                if string.find(name, direction .. ' ' .. sprite) then receptors[name] = actor end
+            elseif direction then
+                --return the frame not the two actors in it
+                if name == direction then receptors[name] = actor end
+            elseif sprite then
+                --return the actor in the frame, not the frame it self. The actor frames all have names <= 5
+                if string.find(name, sprite) and string.len(name) > 5 then receptors[name] = actor end
+            else
+                if string.len(name) <= 5 then receptors[name] = actor end
+            end
+        end
+
+        return receptors
+    end
+    
+    function DIVINE_ENTITY:ReceptorPressed(actor)
+        local prefix = self.receptorsLookupTable[tostring(actor)].name
+        self.receptorsLookupTable[tostring(actor)].state = self.STATE_PRESSED
+        MESSAGEMAN:Broadcast('Step' .. prefix .. 'Pressed')
+    end
+
+    function DIVINE_ENTITY:ReceptorLifted(actor)
+        local prefix = self.receptorsLookupTable[tostring(actor)].name
+        self.receptorsLookupTable[tostring(actor)].state = self.STATE_NEUTRAL
+        MESSAGEMAN:Broadcast('Step' .. prefix .. 'Lifted')
+    end
+
+    function DIVINE_ENTITY:IsReceptorPressed(direction, player)
+        local actor = self.receptors[player][direction]
+        return self.receptorsLookupTable[tostring(actor)].state == self.STATE_PRESSED
+    end
+    
+    function DIVINE_ENTITY:GetReceptorState(direction, player)
+        local actor = self.receptors[player][direction]        
+        return self.receptorsLookupTable[tostring(actor)].state
+    end
+    
+    function DIVINE_ENTITY:ReceptorHitNote(actor, TNS)
+        local prefix = string.sub(self.receptorsLookupTable[tostring(actor)].name, 1, 2)
+        MESSAGEMAN:Broadcast(prefix .. TNS)
+    end
+        
+    --------------------------------------
+    ---Functions for resgistering notes---
+    --------------------------------------
+    
+    --This function is for all the other note register functions to wrap around.
+    function DIVINE_ENTITY:RegisterNote(noteType, name, actor)
+        if self.notes[noteType] == nil then
+            self.notes[noteType] = {}
+        end
+
+        self.notes[noteType][name] = actor
+    end
+    
+    --[[
+    DIVINE_ENTITY provides these wrappers to make code neater in other xml files. 
+    
+    It looks nicer to call RegisterTapNote inside a Tap Note xml file, rather than the
+    generic RegisterNote function. Plus we can forget about the noteType arguement.
+    --]]
+    function DIVINE_ENTITY:RegisterTapNote(name, actor) DIVINE_ENTITY:RegisterNote(self.NOTE_TYPE_TAP, name, actor) end
+    function DIVINE_ENTITY:RegisterActiveHoldHead(name, actor) DIVINE_ENTITY:RegisterNote(self.NOTE_TYPE_HOLD_HEAD_ACTIVE, name, actor) end
+    function DIVINE_ENTITY:RegisterInactiveHoldHead(name, actor) DIVINE_ENTITY:RegisterNote(self.NOTE_TYPE_HOLD_HEAD_INACTIVE, name, actor) end
+    function DIVINE_ENTITY:RegisterActiveRollHead(name, actor) DIVINE_ENTITY:RegisterNote(self.NOTE_TYPE_ROLL_HEAD_ACTIVE, name, actor) end
+    function DIVINE_ENTITY:RegisterInactiveRollHead(name, actor) DIVINE_ENTITY:RegisterNote(self.NOTE_TYPE_ROLL_HEAD_INACTIVE, name, actor) end
+    
+    -------------------------------
+    --Functions for getting notes--
+    -------------------------------
+    
+    --Wrapper around GetActors, more functions wrap around this
+    function DIVINE_ENTITY:GetNotes(noteType, direction, quant, clone)        
+        local nameParams = {direction, quant, clone}
+        return self:GetActors(self.notes[noteType], nameParams)
+    end
+    
+    --These functions are provided to make code simple and easy to read in simfiles.
+    function DIVINE_ENTITY:GetTapNotes(direction, quant, clone) return DIVINE_ENTITY:GetNotes(self.NOTE_TYPE_TAP, direction, quant, clone) end      
+    function DIVINE_ENTITY:GetActiveHoldHeads(direction, quant) return DIVINE_ENTITY:GetNotes(self.NOTE_TYPE_HOLD_HEAD_ACTIVE, direction, quant) end   
+    function DIVINE_ENTITY:GetInactiveHoldHeads(direction, quant) return DIVINE_ENTITY:GetNotes(self.NOTE_TYPE_HOLD_HEAD_INACTIVE, direction, quant) end 
+    function DIVINE_ENTITY:GetActiveRollHeads(direction, quant) return DIVINE_ENTITY:GetNotes(self.NOTE_TYPE_ROLL_HEAD_ACTIVE, direction, quant) end    
+    function DIVINE_ENTITY:GetInactiveRollHeads(direction, quant) return DIVINE_ENTITY:GetNotes(self.NOTE_TYPE_ROLL_HEAD_INACTIVE, direction, quant) end
+        
+    --------------------------------
+    --Misc other NoteSkin elements--
+    --------------------------------
+    
+    --[[
+    The code for mines and explosions is so simple at this stage that it
+    can just be grouped here. The code for mines may get a bit more complex
+    as it seems you can have mines for different quants (eg Left Tap Mine 8th)
+    --]]
+    function DIVINE_ENTITY:RegisterMine(name, actor) self.mines[name] = actor end
+    
+    function DIVINE_ENTITY:GetMines(direction)
+        local nameParams = {direction}
+        return self:GetActors(self.mines, nameParams)
+    end
+    
+    --[[
+    This was structured the same way as Get/RegisterNotes because it seemed like it may
+    be possible to swap out hold explosions and other elements. Turns out it's not,
+    but it is good practice to keep these kind of things generic and expandable.
+    --]]
+    function DIVINE_ENTITY:RegisterExplosion(noteType, name, actor)
+        if self.explosions[noteType] == nil then
+            self.explosions[noteType] = {}
+        end
+
+        self.explosions[noteType][name] = actor
+    end
+
+    function DIVINE_ENTITY:GetExplosions(noteType, direction, explosionType, TNS)
+        local nameParams = {direction, explosionType, TNS}
+        return self:GetActors(self.explosions[noteType], nameParams) --I fixed the explosions.
+    end
+    
+    function DIVINE_ENTITY:RegisterTapExplosion(name, actor) DIVINE_ENTITY:RegisterExplosion(self.EXPLOSION_TYPE_TAP, name, actor) end
+    
+    function DIVINE_ENTITY:GetTapExplosions(direction, explosionType, TNS)
+        return DIVINE_ENTITY:GetExplosions(self.EXPLOSION_TYPE_TAP, direction, explosionType, TNS)
+    end
+    
+    -----------------------------------------
+    --Stuff for overriding NoteSkin metrics--
+    -----------------------------------------
+    
+    function DIVINE_ENTITY:GetMetricCallback(section, command)
+        return self.metrics[section][command]
+    end
+    
+    function DIVINE_ENTITY:SetMetricCallback(section, command, callback)
+        self.metrics[section][command] = callback
+    end
+    
+    --Set up defaults
+    for k,section in pairs({'GhostArrowDim', 'GhostArrowBright'}) do
+        DIVINE_ENTITY:SetMetricCallback(section, 'None', function(actor) return nil end)
+        DIVINE_ENTITY:SetMetricCallback(section, 'HitMine', function(actor) actor:blend('add') actor:diffuse(1,1,1,1) actor:zoom(1) actor:rotationz(0) actor:linear(0.2) actor:rotationz(90) actor:linear(0.2) actor:rotationz(180) actor:diffusealpha(0) end)
+        DIVINE_ENTITY:SetMetricCallback(section, 'Miss', function(actor) return nil end)
+        DIVINE_ENTITY:SetMetricCallback(section, 'Boo', function(actor) actor:diffusealpha(1.2) actor:zoom(1.1) actor:accelerate(0.15) actor:zoom(1.0) actor:diffusealpha(0) end)
+        DIVINE_ENTITY:SetMetricCallback(section, 'Good', function(actor) actor:diffusealpha(1.2) actor:zoom(1.1) actor:accelerate(0.15) actor:zoom(1.0) actor:diffusealpha(0) end)
+        DIVINE_ENTITY:SetMetricCallback(section, 'Great', function(actor) actor:diffusealpha(1.2) actor:zoom(1.1) actor:accelerate(0.15) actor:zoom(1.0) actor:diffusealpha(0) end)
+        DIVINE_ENTITY:SetMetricCallback(section, 'Perfect', function(actor) actor:diffusealpha(1.2) actor:zoom(1.1) actor:accelerate(0.15) actor:zoom(1.0) actor:diffusealpha(0) end)
+        DIVINE_ENTITY:SetMetricCallback(section, 'Marvelous', function(actor) actor:diffusealpha(1.2) actor:zoom(1.1) actor:accelerate(0.15) actor:zoom(1.0) actor:diffusealpha(0) actor:glowshift() actor:effectperiod(0.05) actor:effectcolor1(1,1,1,0) actor:effectcolor2(1,1,1,0.5) end)
+        DIVINE_ENTITY:SetMetricCallback(section, 'NG', function(actor) return nil end)
+        DIVINE_ENTITY:SetMetricCallback(section, 'OK', function(actor) actor:finishtweening() actor:diffusealpha(1.2) actor:zoom(1.1) actor:accelerate(0.09) actor:zoom(1.0) actor:diffusealpha(0) end)
+    end
+    
+    DIVINE_ENTITY:SetMetricCallback('HoldGhostArrow', 'On', function(actor) actor:glowshift() actor:effectperiod(0.05) actor:effectcolor1(1,1,1,0) actor:effectcolor2(1,1,1,0.5) end)
+    
+    DIVINE_ENTITY:SetMetricCallback('ReceptorArrow', 'None', function(actor) actor:zoom(0.75) actor:linear(0.066) actor:zoom(1) end)
+    DIVINE_ENTITY:SetMetricCallback('ReceptorArrow', 'Miss', function(actor) return nil end)
+    DIVINE_ENTITY:SetMetricCallback('ReceptorArrow', 'HitMine', function(actor) return nil end)
+    DIVINE_ENTITY:SetMetricCallback('ReceptorArrow', 'Boo', function(actor) return nil end)
+    DIVINE_ENTITY:SetMetricCallback('ReceptorArrow', 'Good', function(actor) return nil end)
+    DIVINE_ENTITY:SetMetricCallback('ReceptorArrow', 'Great', function(actor) return nil end)
+    DIVINE_ENTITY:SetMetricCallback('ReceptorArrow', 'Perfect', function(actor) return nil end)
+    DIVINE_ENTITY:SetMetricCallback('ReceptorArrow', 'Marvelous', function(actor) return nil end)
+end">
+
+<children>
+    <Actor File='sprites/4th.sprite'
+        InitCommand='%function (self)
+            DIVINE_ENTITY:RegisterTapNote("Left Tap Note 4th Clone 5", self)
+            self:hidden(1)
+            self:rotationz(90)
+        end'
+    />
+    
+    <Actor File='sprites/4th.sprite'
+        InitCommand='%function (self)
+            DIVINE_ENTITY:RegisterTapNote("Left Tap Note 4th Clone 4", self)
+            self:hidden(1)
+            self:rotationz(90)
+        end'
+    />
+    
+    <Actor File='sprites/4th.sprite'
+        InitCommand='%function (self)
+            DIVINE_ENTITY:RegisterTapNote("Left Tap Note 4th Clone 3", self)
+            self:hidden(1)
+            self:rotationz(90)
+        end'
+    />
+    
+    <Actor File='sprites/4th.sprite'
+        InitCommand='%function (self)
+            DIVINE_ENTITY:RegisterTapNote("Left Tap Note 4th Clone 2", self)
+            self:hidden(1)
+            self:rotationz(90)
+        end'
+    />
+    
+    <Actor File='sprites/4th.sprite'
+        InitCommand='%function (self)
+            DIVINE_ENTITY:RegisterTapNote("Left Tap Note 4th Clone 1", self)
+            self:hidden(1)
+            self:rotationz(90)
+        end'
+    />
+    
+    <Actor File='sprites/4th.sprite'
+        InitCommand='%function (self)
+            DIVINE_ENTITY:RegisterTapNote("Left Tap Note 4th Clone 0", self)
+            self:hidden(0)
+            self:rotationz(90)
+        end'
+    />
+</children></ActorFrame>

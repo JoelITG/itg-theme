@@ -1,0 +1,84 @@
+<ActorFrame><children>
+<Actor
+	File="16th.model"
+	InitCommand="queuecommand,Update"
+	UpdateCommand="%function (self)
+	
+		--This is a framework for a noteskin to accept lua
+		
+		if( noteskin_rotationx_8 )then
+			self:rotationx(noteskin_rotationx_8);
+		end
+		if( noteskin_rotationy_8 )then
+			self:rotationy(noteskin_rotationy_8);
+		end
+		if( noteskin_rotationz_8 )then
+			self:rotationz(noteskin_rotationz_8+90);
+		end
+		
+		if( noteskin_x_8 )then
+			self:x(noteskin_x_8);
+		end
+		if( noteskin_y_8 )then
+			self:y(noteskin_y_8);
+		end
+		if( noteskin_z_8 )then
+			self:z(noteskin_z_8);
+		end
+		
+		if( noteskin_zoom_8 )then
+			self:zoom(noteskin_zoom_8);
+		end
+		if( noteskin_zoomx_8 )then
+			self:zoomx(noteskin_zoomx_8);
+		end
+		if( noteskin_zoomy_8 )then
+			self:zoomy(noteskin_zoomy_8);
+		end
+		if( noteskin_zoomtowidth_8 )then
+			self:zoomtowidth(noteskin_zoomtowidth_8);
+		end
+		if( noteskin_zoomtoheight_8 )then
+			self:zoomtoheight(noteskin_zoomtoheight_8);
+		end
+		
+		if( noteskin_tint_8 )then
+			self:diffuse(noteskin_tint_8[1],noteskin_tint_8[2],noteskin_tint_8[3],noteskin_tint_8[4]);
+		end
+		if( noteskin_fade_8 )then
+			self:diffusealpha(noteskin_fade_8);
+		end
+		
+		if( noteskin_effect_8 )then
+			if noteskin_effect_8 == 'wag' then
+				self:wag();
+			end
+			if noteskin_effect_8 == 'vibrate' then
+				self:vibrate();
+			end
+			if noteskin_effect_8 == 'spin' then
+				self:spin();
+			end
+			if noteskin_effect_8 == 'pulse' then
+				self:pulse();
+			end
+			if noteskin_effect_8 == 'bob' then
+				self:bob();
+			end
+			if noteskin_effect_8 == 'bounce' then
+				self:bounce();
+			end
+			if noteskin_effectcontrol_8 then
+				self:effectmagnitude(noteskin_effectcontrol_8[1],noteskin_effectcontrol_8[2],noteskin_effectcontrol_8[3]);
+				self:effectperiod(noteskin_effectcontrol_8[4]);
+				self:effectclock(noteskin_effectcontrol_8[5]);
+			end
+		else
+			self:stopeffect();
+		end
+		
+		self:queuecommand('Update2');
+	end"
+	Update2Command="sleep,0.0333;queuecommand,Update"
+/>
+</children></ActorFrame>

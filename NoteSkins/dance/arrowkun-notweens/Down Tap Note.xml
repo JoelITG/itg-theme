@@ -1,0 +1,4 @@
+<Actor
+	File="_arrowkun 6x1"
+	InitCommand="rotationz,0;setstate,2;"
+/>

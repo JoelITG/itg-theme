@@ -1,0 +1,66 @@
+<ActorFrame
+	InitCommand="%function(self)
+		self:queuecommand('Update');
+	end"
+	UpdateCommand="%function(self)
+			if GAMESTATE:GetSongBeat() < 192 then
+				self:rotationx(0);
+				self:rotationy(0);
+				self:rotationz(180);
+			end
+			if GAMESTATE:GetSongBeat() >= 192 and GAMESTATE:GetSongBeat() < 208 then
+				self:rotationz((GAMESTATE:GetSongBeat() - 192) * -2.8125 + 180);
+			end
+			if GAMESTATE:GetSongBeat() >= 208 and GAMESTATE:GetSongBeat() < 236 then
+				self:rotationz(135);
+			end
+			if GAMESTATE:GetSongBeat() >= 236 and GAMESTATE:GetSongBeat() < 237.5 then
+				self:rotationz((237.5 - GAMESTATE:GetSongBeat()) * -30 + 180);
+			end
+			if GAMESTATE:GetSongBeat() >= 237.5 and GAMESTATE:GetSongBeat() < 240 then
+				self:rotationz(180);
+			end
+		self:queuecommand('Update2');
+	end"
+	Update2Command="%function(self)
+		self:sleep(0.0166666666);
+		self:queuecommand('Update');
+	end"
+	PressCommand="%function(self)
+		self:queuecommand('Update');
+	end"
+	LiftCommand="%function(self)
+		self:queuecommand('Update');
+	end"
+><children>
+	<Sprite
+		Texture="_Down Receptor tex"
+		Frame0000="0"
+		Delay0000="0.95"
+		Frame0001="1"
+		Delay0001="1"
+		Frame0002="2"
+		Delay0002="1"
+		Frame0003="3"
+		Delay0003="1"
+		Frame0004="0"
+		Delay0004="0.05"
+		InitCommand="EffectClock,beat;DiffuseRamp;EffectColor1,0.4,0.4,0.4,1;EffectColor2,1,1,1,1;effectperiod,0.5;EffectDelay,0.5;EffectOffset,0.05"
+	/>
+	<Sprite
+		Texture="_Down Receptor tex"
+		Frame0000="0"
+		Delay0000="0.95"
+		Frame0001="1"
+		Delay0001="1"
+		Frame0002="2"
+		Delay0002="1"
+		Frame0003="3"
+		Delay0003="1"
+		Frame0004="0"
+		Delay0004="0.05"
+		InitCommand="rotationz,0;blend,add;diffusealpha,0"
+		PressCommand="diffusealpha,0.2"
+		LiftCommand="diffusealpha,0"
+	/>
+</children></ActorFrame>

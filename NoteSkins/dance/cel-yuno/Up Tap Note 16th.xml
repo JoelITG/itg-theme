@@ -1,0 +1,84 @@
+<ActorFrame><children>
+<Actor
+	File="16th.model"
+	InitCommand="queuecommand,Update"
+	UpdateCommand="%function (self)
+	
+		--This is a framework for a noteskin to accept lua
+		
+		if( noteskin_rotationx_10 )then
+			self:rotationx(noteskin_rotationx_10);
+		end
+		if( noteskin_rotationy_10 )then
+			self:rotationy(noteskin_rotationy_10);
+		end
+		if( noteskin_rotationz_10 )then
+			self:rotationz(noteskin_rotationz_10+180);
+		end
+		
+		if( noteskin_x_10 )then
+			self:x(noteskin_x_10);
+		end
+		if( noteskin_y_10 )then
+			self:y(noteskin_y_10);
+		end
+		if( noteskin_z_10 )then
+			self:z(noteskin_z_10);
+		end
+		
+		if( noteskin_zoom_10 )then
+			self:zoom(noteskin_zoom_10);
+		end
+		if( noteskin_zoomx_10 )then
+			self:zoomx(noteskin_zoomx_10);
+		end
+		if( noteskin_zoomy_10 )then
+			self:zoomy(noteskin_zoomy_10);
+		end
+		if( noteskin_zoomtowidth_10 )then
+			self:zoomtowidth(noteskin_zoomtowidth_10);
+		end
+		if( noteskin_zoomtoheight_10 )then
+			self:zoomtoheight(noteskin_zoomtoheight_10);
+		end
+		
+		if( noteskin_tint_10 )then
+			self:diffuse(noteskin_tint_10[1],noteskin_tint_10[2],noteskin_tint_10[3],noteskin_tint_10[4]);
+		end
+		if( noteskin_fade_10 )then
+			self:diffusealpha(noteskin_fade_10);
+		end
+		
+		if( noteskin_effect_10 )then
+			if noteskin_effect_10 == 'wag' then
+				self:wag();
+			end
+			if noteskin_effect_10 == 'vibrate' then
+				self:vibrate();
+			end
+			if noteskin_effect_10 == 'spin' then
+				self:spin();
+			end
+			if noteskin_effect_10 == 'pulse' then
+				self:pulse();
+			end
+			if noteskin_effect_10 == 'bob' then
+				self:bob();
+			end
+			if noteskin_effect_10 == 'bounce' then
+				self:bounce();
+			end
+			if noteskin_effectcontrol_10 then
+				self:effectmagnitude(noteskin_effectcontrol_10[1],noteskin_effectcontrol_10[2],noteskin_effectcontrol_10[3]);
+				self:effectperiod(noteskin_effectcontrol_10[4]);
+				self:effectclock(noteskin_effectcontrol_10[5]);
+			end
+		else
+			self:stopeffect();
+		end
+		
+		self:queuecommand('Update2');
+	end"
+	Update2Command="sleep,0.0333;queuecommand,Update"
+/>
+</children></ActorFrame>

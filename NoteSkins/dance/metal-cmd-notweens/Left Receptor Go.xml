@@ -1,0 +1,106 @@
+<!--
+This is WinDEU's much-simplified version of the GOD Noteskin by Taro/Jayce,
+Re-edited so it can read inputs without breaking stealth, and also detect non-miss judgments
+-->
+<ActorFrame><children>
+	<ActorFrame
+		InitCommand="%function(self)
+			LzCheckCelWinDEUTaro = 0;
+			self:z(0);
+			if LGenerationA == nil then LGenerationA = 0; end
+			if LGenerationA == 2 then LGenerationA = 0;	end
+			if LGenerationA == 0 then
+				self:z(1);
+				LGenerationA = LGenerationA + 1;
+			else
+				LGenerationA = LGenerationA + 1;
+			end
+		end"
+		
+W1Command="%function(self) LzCheckCelWinDEUTaro = self:GetZ(); if LzCheckCelWinDEUTaro > 0 then
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then MESSAGEMAN:Broadcast('W1P1Left'); MESSAGEMAN:Broadcast('W1P1'); else
+MESSAGEMAN:Broadcast('W1P2Left'); MESSAGEMAN:Broadcast('W1P2'); end else MESSAGEMAN:Broadcast('W1P2Left'); MESSAGEMAN:Broadcast('W1P2'); end end"
+
+W2Command="%function(self) LzCheckCelWinDEUTaro = self:GetZ(); if LzCheckCelWinDEUTaro > 0 then
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then MESSAGEMAN:Broadcast('W2P1Left'); MESSAGEMAN:Broadcast('W2P1'); else
+MESSAGEMAN:Broadcast('W2P2Left'); MESSAGEMAN:Broadcast('W2P2'); end else MESSAGEMAN:Broadcast('W2P2Left'); MESSAGEMAN:Broadcast('W2P2'); end end"
+
+W3Command="%function(self) LzCheckCelWinDEUTaro = self:GetZ(); if LzCheckCelWinDEUTaro > 0 then
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then MESSAGEMAN:Broadcast('W3P1Left'); MESSAGEMAN:Broadcast('W3P1'); else
+MESSAGEMAN:Broadcast('W3P2Left'); MESSAGEMAN:Broadcast('W3P2'); end else MESSAGEMAN:Broadcast('W3P2Left'); MESSAGEMAN:Broadcast('W3P2'); end end"
+
+W4Command="%function(self) LzCheckCelWinDEUTaro = self:GetZ(); if LzCheckCelWinDEUTaro > 0 then
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then MESSAGEMAN:Broadcast('W4P1Left'); MESSAGEMAN:Broadcast('W4P1'); else
+MESSAGEMAN:Broadcast('W4P2Left'); MESSAGEMAN:Broadcast('W4P2'); end else MESSAGEMAN:Broadcast('W4P2Left'); MESSAGEMAN:Broadcast('W4P2'); end end"
+
+W5Command="%function(self) LzCheckCelWinDEUTaro = self:GetZ(); if LzCheckCelWinDEUTaro > 0 then
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then MESSAGEMAN:Broadcast('W5P1Left'); MESSAGEMAN:Broadcast('W5P1'); else
+MESSAGEMAN:Broadcast('W5P2Left'); MESSAGEMAN:Broadcast('W5P2'); end else MESSAGEMAN:Broadcast('W5P2Left'); MESSAGEMAN:Broadcast('W5P2'); end end"
+
+W6Command="%function(self) LzCheckCelWinDEUTaro = self:GetZ(); if LzCheckCelWinDEUTaro > 0 then
+if GAMESTATE:IsPlayerEnabled(PLAYER_1) then MESSAGEMAN:Broadcast('MissP1Left'); MESSAGEMAN:Broadcast('MissP1'); else
+MESSAGEMAN:Broadcast('MissP2Left'); MESSAGEMAN:Broadcast('MissP2'); end else MESSAGEMAN:Broadcast('MissP2Left'); MESSAGEMAN:Broadcast('MissP2'); end end"
+		
+		PressCommand="%function(self)
+			LzCheckCelWinDEUTaro = self:GetZ();
+			if LzCheckCelWinDEUTaro > 0 then
+				if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
+					LpressP1 = 1;
+					MESSAGEMAN:Broadcast('StepLeftP1');
+				else
+					LpressP2 = 1;
+					MESSAGEMAN:Broadcast('StepLeftP2');
+				end
+			else
+				LpressP2 = 1;
+				MESSAGEMAN:Broadcast('StepLeftP2');
+			end
+		end"
+		LiftCommand="%function(self)
+			LzCheckCelWinDEUTaro = self:GetZ();
+			if LzCheckCelWinDEUTaro > 0 then
+				if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
+					LpressP1 = 0;
+					MESSAGEMAN:Broadcast('LiftLeftP1');
+				else
+					LpressP2 = 0;
+					MESSAGEMAN:Broadcast('LiftLeftP2');
+				end
+			else
+				LpressP2 = 0;
+				MESSAGEMAN:Broadcast('LiftLeftP2');
+			end
+		end"
+	><children>
+		<Sprite
+			Texture="_Down Receptor tex"
+			Frame0000="0"
+			Delay0000="0.95"
+			Frame0001="1"
+			Delay0001="1"
+			Frame0002="2"
+			Delay0002="1"
+			Frame0003="3"
+			Delay0003="1"
+			Frame0004="0"
+			Delay0004="0.05"
+			InitCommand="rotationz,90;EffectClock,beat;DiffuseRamp;EffectColor1,0.4,0.4,0.4,1;EffectColor2,1,1,1,1,1;effectperiod,0.5;EffectDelay,0.5;EffectOffset,0.05"
+		/>
+		<Sprite
+			Texture="_Down Receptor tex"
+			Frame0000="0"
+			Delay0000="0.95"
+			Frame0001="1"
+			Delay0001="1"
+			Frame0002="2"
+			Delay0002="1"
+			Frame0003="3"
+			Delay0003="1"
+			Frame0004="0"
+			Delay0004="0.05"
+			InitCommand="rotationz,90;blend,add;diffusealpha,0"
+			PressCommand="diffusealpha,0.2"
+			LiftCommand="diffusealpha,0"
+		/>
+	</children></ActorFrame>
+</children></ActorFrame>
